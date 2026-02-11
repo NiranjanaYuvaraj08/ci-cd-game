@@ -51,15 +51,20 @@ pipeline {
         }
 
         stage('Deploy Website') {
-    steps {
-        withCredentials([sshUserPrivateKey(credentialsId: 'ec2-key',
-                                           keyFileVariable: 'SSH_KEY')]) {
-            sh """
-            scp -r -i $SSH_KEY -o StrictHostKeyChecking=no website/* ubuntu@${SERVER_IP}:/tmp/
-            """
+            steps {
+                sh """
+                scp -r -i ${KEY_PATH} -o StrictHostKeyChecking=no website/* ubuntu@${SERVER_IP}:/tmp/
+                """
+
+                sh """
+                ssh -i ${KEY_PATH} -o StrictHostKeyChecking=no ubuntu@${SERVER_IP} "
+                sudo rm -rf /var/www/html/* &&
+                sudo mv /tmp/* /var/www/html/ &&
+                sudo systemctl restart nginx"
+                """
+            }
         }
     }
-}
 
 
     post {
