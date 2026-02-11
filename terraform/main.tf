@@ -7,7 +7,7 @@ resource "aws_instance" "game_server" {
   instance_type = "t3.small"
   key_name      = "mak_1"
 
-  security_groups = [aws_security_group.mak.name]
+  security_groups = [aws_security_group.ny.name]
 
   user_data = <<-EOF
               #!/bin/bash
@@ -18,12 +18,12 @@ resource "aws_instance" "game_server" {
               EOF
 
   tags = {
-    Name = "Game-Server"
+    Name = "ny"
   }
 }
 
-resource "aws_security_group" "mak" {
-  name = "mak"
+resource "aws_security_group" "ny" {
+  name = "ny"
 
   ingress {
     from_port   = 22
